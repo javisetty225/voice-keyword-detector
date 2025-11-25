@@ -1,55 +1,48 @@
-# Voicebot
+# VoiceBot
 
-The Voicebot project converts spoken German into text and detects specific keywords.  
-It consists of a Flask backend for speech recognition and a Streamlit frontend for interaction.  
-Both services are containerized using Docker and orchestrated with Docker Compose.
+Lightweight speech-to-text + keyword extraction service with a FastAPI backend and Streamlit UI.
+
+## Architecture
+- Backend: FastAPI (`backend/api_server.py`) serving ASR + keyword detection.
+- Frontend: Streamlit (`frontend/web_app.py`) simple UI for upload and display.
+- Tests: PyTest in `tests/`.
+- Models/keywords: `backend/keywords.json`.
 
 ## Features
+- Upload audio (wav/mp3/ogg) -> automatic conversion -> transcription.
+- Keyword detection from configurable list.
+- Docker + local dev workflows.
+- Mockable components for fast tests.
 
-- Transcribe German speech to text using a Hugging Face Whisper-based model.
-- Detect configured keywords in the transcribed text.
-- Upload or record audio via a web interface.
-- Highlight detected keywords in the UI.
+## Tech Stack
+Python 3.12, FastAPI, Streamlit, Pydub, PyTest, Uvicorn, Docker.
 
 ## Project Structure
 
 ```
 voicebot/
 ├── backend/
-│   ├── app.py
+│   ├── app_server.py
 │   ├── keywords.json
 │  
-│   
 ├── frontend/
-│   ├── frontend.py
-│ 
-│   
+│   ├── web_app.py
+│    
+├── tests/
+│   ├── test_api_server.py
+│   ├── test_keywords.py
+│
 ├── docker-compose.yml
     Dockerfile
-    requirements.txt
+    pyproject.toml
+    uv.lock
+    README.md
 ```
-
-### Backend
-
-- **api_server.py**: Main application file for the Flask backend.
-- **keywords.json**: Configuration file containing the keywords to be detected.
-
-### Frontend
-
-- **frontend.py**: Main application file for the Streamlit frontend.
-- **requirements.txt**: Python dependencies for the frontend.
 
 ### Root
 
 - **Dockerfile**: Dockerfile for building the frontend and backend container.
 - **docker-compose.yml**: Docker Compose file to run the backend and frontend services.
-
-## Getting Started
-
-### Prerequisites
-
-- Docker
-- Docker Compose
 
 ### Installation & Run
 
@@ -104,6 +97,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
----
-
-This README file provides a comprehensive guide to setting up, running, and using the Voicebot project. It includes information on the project structure, installation steps, usage instructions, and troubleshooting tips.
