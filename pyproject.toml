@@ -48,7 +48,6 @@ extend-select = [
     "PLE", "PLW", "PLC", "PLR", "FAST", "I", "D419",
     "E501", "W291", "UP004", "C416", "B033", "E722"
 ]
-ignore = []
 
 [tool.hatch.build.targets.wheel]
 packages = ["user_demo", "src"]
