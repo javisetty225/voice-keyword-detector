@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "voicebot"
 version = "0.1.0"
-description = "German speech transcription and keyword detection voicebot with Flask backend and Streamlit frontend."
+description = "German speech transcription and keyword detection voicebot with FastAPI backend and Streamlit frontend."
 readme = "README.md"
 requires-python = "==3.12.10"
 authors = [
@@ -15,26 +15,40 @@ authors = [
 dependencies = [
   # Backend dependencies
   "fastapi==0.122.0",
-    "uvicorn== 0.38.0",
-  "torch== 2.9.1",
-  "transformers== 4.41.1",
-  "pydub== 0.25.1",
-    "python-multipart==0.0.20",
+  "uvicorn==0.38.0",
+  "torch==2.9.1",
+  "transformers==4.41.1",
+  "pydub==0.25.1",
+  "python-multipart==0.0.20",
   # Frontend dependencies
   "streamlit==1.35.0",
   "requests==2.32.3",
   "streamlit-audiorecorder==0.0.6",
-
+  "pytest>=9.0.1",
 ]
 
 [project.optional-dependencies]
-dev = [
+tests = [
   "pytest",
-    "ruff",
+  "httpx"
 ]
 
-[tool.hatch.build.targets.wheel]
-packages = ["frontend", "backend"]
-
 [project.urls]
-Homepage = "https://example.com/voicebot"
+homepage = "https://example.com/voicebot"
+
+[tool.setuptools.packages.find]
+exclude = ["tests"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+preview = true
+extend-select = [
+    "PLE", "PLW", "PLC", "PLR", "FAST", "I", "D419",
+    "E501", "W291", "UP004", "C416", "B033", "E722"
+]
+ignore = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["user_demo", "src"]
