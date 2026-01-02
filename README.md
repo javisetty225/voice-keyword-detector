@@ -1,48 +1,17 @@
-# VoiceBot
+# voice keyword detector
 
 Lightweight speech-to-text + keyword extraction service with a FastAPI backend and Streamlit UI.
 
 ## Architecture
-- Backend: FastAPI (`backend/api_server.py`) serving ASR + keyword detection.
-- Frontend: Streamlit (`frontend/web_app.py`) simple UI for upload and display.
-- Tests: PyTest in `tests/`.
-- Models/keywords: `backend/keywords.json`.
+
+- **Backend (FastAPI):** Handles audio upload, speech-to-text transcription, and keyword detection.
+- **Frontend (Streamlit):** Provides a simple UI for uploading or recording audio and displaying results.
+- **Keywords:** Defined in `src/keywords.json` and used to detect and highlight terms in the transcribed text.
 
 ## Features
 - Upload audio (wav/mp3/ogg) -> automatic conversion -> transcription.
 - Keyword detection from configurable list.
-- Docker + local dev workflows.
 - Mockable components for fast tests.
-
-## Tech Stack
-Python 3.12, FastAPI, Streamlit, Pydub, PyTest, Uvicorn, Docker.
-
-## Project Structure
-
-```
-voicebot/
-├── backend/
-│   ├── app_server.py
-│   ├── keywords.json
-│  
-├── frontend/
-│   ├── web_app.py
-│    
-├── tests/
-│   ├── test_api_server.py
-│   ├── test_keywords.py
-│
-├── docker-compose.yml
-    Dockerfile
-    pyproject.toml
-    uv.lock
-    README.md
-```
-
-### Root
-
-- **Dockerfile**: Dockerfile for building the frontend and backend container.
-- **docker-compose.yml**: Docker Compose file to run the backend and frontend services.
 
 ### Installation & Run
 
@@ -71,12 +40,21 @@ voicebot/
    - The transcribed text is shown on the page.
    - Detected keywords are highlighted with colored buttons.
 
+### User Demo UI
+
+- Transcribed Text: Inline highlighted keywords
+
+- Keywords List: Detected keywords in plain text
+
+<img src="docs/voicebot_demo_screenshot.png" width="900" alt="Voicebot Demo Screenshot">
+)
+
 ### Configuration
 
 - **keywords.json**: Update this file to modify the list of keywords to be detected. Example format:
   ```json
   {
-      "keywords": ["rot", "blau", "England"]
+      "keywords": ["Leipzig", "Zug", "Berlin"]
   }
   ```
 
@@ -87,11 +65,7 @@ To test the application, you can use any German language audio file. The backend
 ### Troubleshooting
 
 - Ensure Docker and Docker Compose are installed and running correctly.
-- Verify that the ports `5000` (backend) and `8080` (frontend) are not being used by other applications.
-
-### Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+- Verify that the ports `8000` (backend) and `8080` (frontend) are not being used by other applications.
 
 ### License
 
