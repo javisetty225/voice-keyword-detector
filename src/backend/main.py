@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.server_endpoints import register_chatbot_routes
+from src.backend.server_endpoints import register_chatbot_routes
 
 
 def create_app() -> FastAPI:

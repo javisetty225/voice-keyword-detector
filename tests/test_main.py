@@ -3,8 +3,8 @@ import io
 import pytest
 from fastapi.testclient import TestClient
 
-from src import server_endpoints
-from src.main import create_app
+from src.backend import server_endpoints
+from src.backend.main import create_app
 
 
 @pytest.fixture

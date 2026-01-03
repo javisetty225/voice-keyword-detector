@@ -10,8 +10,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from pydub import AudioSegment
 from transformers import pipeline
 
-from src.server_schemas import KeywordsResponse, TranscribeResponse
-
+from src.backend.server_schemas import KeywordsResponse, TranscribeResponse
 
 MODEL_NAME = os.getenv("ASR_MODEL", "bofenghuang/whisper-medium-cv11-german")
 MAX_FILE_SIZE_MB = int(os.getenv("MAX_FILE_SIZE_MB", "25"))
