@@ -28,7 +28,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-tests = [
+dev = [
   "pytest",
   "httpx"
 ]
