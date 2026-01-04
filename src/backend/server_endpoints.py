@@ -4,6 +4,8 @@ import os
 import re
 import tempfile
 import time
+from pathlib import Path
+from typing import Annotated
 
 import torch
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -15,7 +17,7 @@ from src.backend.server_schemas import KeywordsResponse, TranscribeResponse
 MODEL_NAME = os.getenv("ASR_MODEL", "bofenghuang/whisper-medium-cv11-german")
 MAX_FILE_SIZE_MB = int(os.getenv("MAX_FILE_SIZE_MB", "25"))
 ALLOWED_EXT = {".wav", ".mp3"}
-KEYWORDS_PATH = os.getenv("KEYWORDS_PATH", os.path.join(os.path.dirname(__file__), "keywords.json"))
+KEYWORDS_PATH = Path("keywords.json")
 PIPELINE_TASK = "automatic-speech-recognition"
 
 # Logging
@@ -29,20 +31,18 @@ keyword_set: set[str] = set()
 word_pattern = re.compile(r"\b[\wäöüÄÖÜß]+\b", re.UNICODE)
 
 
-def load_keywords() -> list[str]:
-    """Load keywords from JSON file and populate the keyword set."""
-    global keyword_set
+def load_keywords() -> set[str]:
+    """Load keywords from JSON file"""
+    global keyword_set  # noqa: PLW0603
     try:
         with open(KEYWORDS_PATH, encoding="utf-8") as f:
             keywords_raw = json.load(f).get("keywords", [])
-        keyword_list = [k.lower() for k in keywords_raw]
-        keyword_set = set(keyword_list)  # <--- initialize global set
-        logger.info("Loaded %d keywords", len(keyword_list))
-        return keyword_list
+        keyword_set = {k.lower() for k in keywords_raw}  # lowercased and unique
+        logger.info("Loaded %d keywords", len(keyword_set))
+        return keyword_set
     except Exception:
         logger.exception("Failed to load keywords")
-        keyword_set = set()
-        return []
+        return set()
 
 
 def get_asr_pipeline():
@@ -96,7 +96,7 @@ def register_chatbot_routes(app: FastAPI):
         return KeywordsResponse(keywords=sorted(load_keywords()))
 
     @app.post("/transcribe", response_model=TranscribeResponse)
-    async def transcribe(audio_file: UploadFile = File(...)):
+    async def transcribe(audio_file: Annotated[UploadFile, File(...)]):  # noqa: PLR0914
         if not audio_file.filename:
             raise HTTPException(status_code=400, detail="Empty filename")
 

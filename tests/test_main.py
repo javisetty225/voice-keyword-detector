@@ -6,6 +6,10 @@ from fastapi.testclient import TestClient
 from src.backend import server_endpoints
 from src.backend.main import create_app
 
+STATUS_OK = 200
+STATUS_BAD_REQUEST = 400
+STATUS_UNPROCESSABLE_ENTITY = 422
+
 
 @pytest.fixture
 def client():
@@ -14,7 +18,7 @@ def client():
 
 def test_transcribe_missing_file(client):
     response = client.post("/transcribe")
-    assert response.status_code == 422
+    assert response.status_code == STATUS_UNPROCESSABLE_ENTITY
 
 
 def test_transcribe_unsupported_format(client):
@@ -25,7 +29,7 @@ def test_transcribe_unsupported_format(client):
         files={"audio_file": ("test.txt", fake_audio, "text/plain")},
     )
 
-    assert response.status_code == 400
+    assert response.status_code == STATUS_BAD_REQUEST
     assert response.json()["detail"] == "Unsupported file extension"
 
 
@@ -58,7 +62,7 @@ def test_transcribe_valid_audio_mocked(client, monkeypatch):
         files={"audio_file": ("test.wav", fake_audio, "audio/wav")},
     )
 
-    assert response.status_code == 200
+    assert response.status_code == STATUS_OK
 
     data = response.json()
     assert data["text"] == "Hallo Welt"

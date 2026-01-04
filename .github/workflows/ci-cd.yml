@@ -79,7 +79,7 @@ jobs:
 
   # ---------------- Deployment ----------------
   deploy:
-    name: Deploy Chatbot via Helm
+    name: Deploy Voicebot via Helm
     runs-on: ubuntu-latest
     needs: docker_build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
@@ -109,12 +109,12 @@ jobs:
         run: echo "BRANCH_NAME=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
       # ---------------- Deploy via Helm ----------------
-      - name: Deploy Chatbot
+      - name: Deploy Voicebot
         run: |
-          DEPLOYMENT_NAME="chatbot-${{ steps.get_branch.outputs.BRANCH_NAME }}"
+          DEPLOYMENT_NAME="voicebot-${{ steps.get_branch.outputs.BRANCH_NAME }}"
           echo "Deploying with name: $DEPLOYMENT_NAME"
           helm upgrade --install $DEPLOYMENT_NAME ./helm_chart \
             --set image.repository=ghcr.io/${{ github.repository }} \
             --set image.tag=latest \
-            --namespace chatbot --create-namespace \
+            --namespace voicebot --create-namespace \
             --timeout 10m0s --wait
